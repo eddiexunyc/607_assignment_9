@@ -15,10 +15,16 @@ transform it into an R DataFrame.
 
 ```{r package message=FALSE, warning=FALSE}
 library(tidyverse)
-li
+library(httr)
+library(jsonlite)
 ```
 
 ## Pulling the API
 ```{r}
 
+api_url <- ("https://api.nytimes.com/svc/books/v3/lists/overview.json?api-key=cDBAu9OXHrsoKc2KmVV55xQcpC2J7uHO")
+
+api_json <- fromJSON(api_url)
+
+api_json
 ```
