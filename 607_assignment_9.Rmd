@@ -1,0 +1,24 @@
+---
+title: "607_assignment_9"
+output: html_document
+date: "2023-03-20"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The purpose of the assignment is to choose one of the New York Times APIs, construct an interface in R to read in the JSON data, and
+transform it into an R DataFrame.
+
+## Load Package
+
+```{r package message=FALSE, warning=FALSE}
+library(tidyverse)
+li
+```
+
+## Pulling the API
+```{r}
+
+```
