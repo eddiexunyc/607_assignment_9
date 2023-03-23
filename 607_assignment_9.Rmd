@@ -4,27 +4,49 @@ output: html_document
 date: "2023-03-20"
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 The purpose of the assignment is to choose one of the New York Times APIs, construct an interface in R to read in the JSON data, and
 transform it into an R DataFrame.
 
 ## Load Package
-
-```{r package message=FALSE, warning=FALSE}
+```{r}
 library(tidyverse)
 library(httr)
 library(jsonlite)
 ```
 
 ## Pulling the API
+The NYT API will be focusing on the graphic books and manga published by VIZ media, a famous publisher known for japanese manga, and see how many books are in the top-selling list.
+
 ```{r}
+#set up base and other paths for API
+api_base <- "https://api.nytimes.com/svc/books/v3"
+api_book <- "/lists/current/graphic-books-and-manga"
+api_key <- ".json?api-key="
+my_key <- read.delim("nyt_api_key.txt", header = FALSE) #the API is stored locally
+api_url <- paste0(api_base, api_book, api_key, my_key)
 
-api_url <- ("https://api.nytimes.com/svc/books/v3/lists/overview.json?api-key=cDBAu9OXHrsoKc2KmVV55xQcpC2J7uHO")
+# extract data from api link
+raw_api_data <- GET(api_url)
 
-api_json <- fromJSON(api_url)
-
-api_json
+# check status of the API
+http_status(raw_api_data)
 ```
+
+## Turn raw JSON into a dataframe
+```{r}
+#convert json to dataframe
+json_book_data <- fromJSON(rawToChar(raw_api_data$content))
+book_data <- as.data.frame(json_book_data$results$books)
+
+knitr::kable(book_data)
+```
+
+## View only books from the publisher, VIZ media
+```{r}
+viz_book_data <- subset(book_data, book_data$publisher == 'VIZ Media', select = c("rank", "publisher", "title", "author", "description"))
+
+knitr::kable(viz_book_data)
+```
+
+## Conclusion
+In conclusion, APIs can be useful tools in extracting raw json data effectively.
